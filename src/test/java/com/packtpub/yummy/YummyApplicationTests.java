@@ -20,15 +20,4 @@ public class YummyApplicationTests {
 	public void contextLoads() {
 	}
 
-	@Autowired
-    DatePrinter datePrinter;
-
-	@MockBean
-    TimeFactory timeFactory;
-
-	@Test
-    public void datePrinterWorks(){
-	    given(timeFactory.now()).willReturn(LocalDateTime.of(2017,5,1,17,41,12));
-	    assertEquals("Now it is 2017-05-01T17:41:12", datePrinter.printDate());
-    }
 }
