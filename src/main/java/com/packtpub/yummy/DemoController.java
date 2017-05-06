@@ -1,8 +1,6 @@
 package com.packtpub.yummy;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
@@ -32,6 +30,21 @@ public class DemoController {
 
     @RequestMapping(path = "many/{name}/{repetitions}")
     public String sayTheTimeManyParamsPath(Params params) {
+        return IntStream.rangeClosed(1, params.getRepetitions())
+                .mapToObj(i -> i + ". Hello " + params.getName() + "! Now it is " + LocalDateTime.now())
+                .collect(Collectors.joining("\n"));
+    }
+
+    @RequestMapping(path = "many2/{name}/{repetitions}")
+    public String sayTheTimeManyPathExplicit(@PathVariable String name, @PathVariable int repetitions) {
+        return IntStream.rangeClosed(1, repetitions)
+                .mapToObj(i -> i + ". Hello " + name + "! Now it is " + LocalDateTime.now())
+                .collect(Collectors.joining("\n"));
+    }
+
+
+    @PostMapping(path = "manyParams")
+    public String sayTheTimeManyParamsPost(@RequestBody Params params) {
         return IntStream.rangeClosed(1, params.getRepetitions())
                 .mapToObj(i -> i + ". Hello " + params.getName() + "! Now it is " + LocalDateTime.now())
                 .collect(Collectors.joining("\n"));
