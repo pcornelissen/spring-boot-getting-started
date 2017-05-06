@@ -54,6 +54,14 @@ public class DemoController {
         String name;
         int repetitions=11;
 
+        public Params() {
+        }
+
+        public Params(String name, int repetitions) {
+            this.name = name;
+            this.repetitions = repetitions;
+        }
+
         public String getName() {
             return name;
         }
