@@ -3,10 +3,7 @@ package com.packtpub.yummy.service;
 import com.packtpub.yummy.model.Bookmark;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by pcpacktpub on 07/05/2017.
@@ -27,4 +24,7 @@ public class BookmarkService {
         throw new NoSuchElementException();
     }
 
+    public Collection<Bookmark> findAll() {
+        return db.values();
+    }
 }
