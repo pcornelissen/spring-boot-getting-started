@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URISyntaxException;
+
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
@@ -13,7 +15,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 @RequestMapping
 public class ServiceDocumentController {
     @GetMapping("/")
-    public Resource<String> getServiceDocument(){
+    public Resource<String> getServiceDocument() throws URISyntaxException {
         return new Resource<>("Yummy is the best service",
                 BasicLinkBuilder.linkToCurrentMapping().withSelfRel(),
                 linkTo(methodOn(BookmarksController.class).addBookmark(null)).withRel("bookmarks")
