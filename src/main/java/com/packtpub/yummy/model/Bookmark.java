@@ -31,4 +31,8 @@ public class Bookmark {
     public Bookmark withUuid(UUID uuid) {
         return new Bookmark(url,uuid);
     }
+
+    public Bookmark withUrl(String newUrl) {
+        return new Bookmark(newUrl, uuid);
+    }
 }

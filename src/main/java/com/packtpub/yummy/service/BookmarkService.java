@@ -27,4 +27,11 @@ public class BookmarkService {
     public Collection<Bookmark> findAll() {
         return db.values();
     }
+
+    public Bookmark update(Bookmark bookmark) {
+        if(!db.containsKey(bookmark.getUuid()))
+            throw new NoSuchElementException();
+        db.put(bookmark.getUuid(), bookmark);
+        return bookmark;
+    }
 }
