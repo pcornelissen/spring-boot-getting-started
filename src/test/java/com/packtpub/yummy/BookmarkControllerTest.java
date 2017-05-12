@@ -90,6 +90,25 @@ public class BookmarkControllerTest {
     }
 
     @Test
+    public void updateABookmarkStaleFails() throws Exception {
+        Bookmark input = new Bookmark("http://packtpub.com");
+        String location = addBookmark(input);
+
+        Resource<Bookmark> output = getBookmark(location);
+        mvc.perform(
+                post(output.getId().getHref())
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(mapper.writeValueAsString(output.getContent().withUrl("http://kulinariweb.de")))
+        ).andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        mvc.perform(
+                post(output.getId().getHref())
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(mapper.writeValueAsString(output.getContent().withUrl("http://kulinariweb2.de")))
+        ).andDo(print()).andExpect(status().isConflict());
+    }
+    @Test
     public void updateABookmarkFailWrongId() throws Exception {
         Bookmark input = new Bookmark("http://packtpub.com");
 

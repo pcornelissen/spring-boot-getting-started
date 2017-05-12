@@ -1,43 +1,37 @@
 package com.packtpub.yummy.service;
 
 import com.packtpub.yummy.model.Bookmark;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-/**
- * Created by pcpacktpub on 07/05/2017.
- */
 @Service
 public class BookmarkService {
-    private Map<UUID, Bookmark> db=new HashMap<>();
+
+    @Autowired
+    BookmarkDao dao;
 
     public UUID addBookmark(Bookmark bookmark) {
-        UUID uuid = UUID.randomUUID();
-        db.put(uuid,bookmark.withUuid(uuid));
-        return uuid;
+        return dao.save(bookmark).getUuid();
     }
 
     public Bookmark find(UUID id) {
-        if(db.containsKey(id))
-            return db.get(id);
-        throw new NoSuchElementException();
+        return Optional.ofNullable(dao.findOne(id)).orElseThrow(
+                () -> new NoSuchElementException());
     }
 
-    public Collection<Bookmark> findAll() {
-        return db.values();
+    public Iterable<Bookmark> findAll() {
+        return dao.findAll();
     }
 
     public Bookmark update(Bookmark bookmark) {
-        if(!db.containsKey(bookmark.getUuid()))
-            throw new NoSuchElementException();
-        db.put(bookmark.getUuid(), bookmark);
-        return bookmark;
+        find(bookmark.getUuid());
+        return dao.save(bookmark);
     }
 
     public void delete(UUID id) {
-        if(!db.containsKey(id))
-            throw new NoSuchElementException();
-        db.remove(id);
+        find(id);
+        dao.delete(id);
     }
 }
