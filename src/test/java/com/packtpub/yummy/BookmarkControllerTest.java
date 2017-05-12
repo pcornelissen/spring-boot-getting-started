@@ -12,12 +12,13 @@ import org.springframework.hateoas.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -42,6 +43,34 @@ public class BookmarkControllerTest {
     }
 
     @Test
+    public void deleteABookmark() throws Exception {
+        Bookmark input = new Bookmark("http://packtpub.com");
+        String location = addBookmark(input);
+
+        mvc.perform(
+                delete(location)
+        ).andExpect(status().isGone());
+
+        mvc.perform(
+                get(location)
+        ).andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void deleteABookmarkTwiceYieldsNotModified() throws Exception {
+        Bookmark input = new Bookmark("http://packtpub.com");
+        String location = addBookmark(input);
+
+        mvc.perform(
+                delete(location)
+        ).andExpect(status().isGone());
+
+        mvc.perform(
+                delete(location)
+        ).andExpect(status().isNotModified());
+    }
+
+    @Test
     public void updateABookmark() throws Exception {
         Bookmark input = new Bookmark("http://packtpub.com");
         String location = addBookmark(input);
@@ -54,7 +83,7 @@ public class BookmarkControllerTest {
                         .content(mapper.writeValueAsString(output.getContent().withUrl("http://kulinariweb.de")))
         ).andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
-        output= mapper.readValue(result, new TypeReference<Resource<Bookmark>>() {
+        output = mapper.readValue(result, new TypeReference<Resource<Bookmark>>() {
         });
 
         assertEquals("http://kulinariweb.de", output.getContent().getUrl());
@@ -65,7 +94,7 @@ public class BookmarkControllerTest {
         Bookmark input = new Bookmark("http://packtpub.com");
 
         mvc.perform(
-                post("/bookmark/"+ UUID.randomUUID())
+                post("/bookmark/" + UUID.randomUUID())
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content(mapper.writeValueAsString(input))
         ).andExpect(status().isNotFound())
@@ -74,7 +103,7 @@ public class BookmarkControllerTest {
 
     private Resource<Bookmark> getBookmark(String location) throws Exception {
         String result = mvc.perform(
-                MockMvcRequestBuilders.get(location)
+                get(location)
         ).andDo(print())
                 .andReturn().getResponse().getContentAsString();
         return mapper.readValue(result, new TypeReference<Resource<Bookmark>>() {

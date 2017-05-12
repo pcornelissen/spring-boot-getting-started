@@ -4,8 +4,11 @@ import com.packtpub.yummy.model.Bookmark;
 import com.packtpub.yummy.service.BookmarkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -28,6 +31,17 @@ public class BookmarkController {
         return new Resource<>(bookmarkService.update(bookmark.withUuid(id)),
                 linkTo(methodOn(BookmarkController.class).getBookmark(id)).withSelfRel()
                 );
+    }
+
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deleteBookmark(@PathVariable UUID id){
+        try {
+            bookmarkService.delete(id);
+            return ResponseEntity.status(HttpStatus.GONE).build();
+        }catch (NoSuchElementException e){
+            return ResponseEntity.status(HttpStatus.NOT_MODIFIED).build();
+        }
     }
 
 }

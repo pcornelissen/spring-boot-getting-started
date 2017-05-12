@@ -34,4 +34,10 @@ public class BookmarkService {
         db.put(bookmark.getUuid(), bookmark);
         return bookmark;
     }
+
+    public void delete(UUID id) {
+        if(!db.containsKey(id))
+            throw new NoSuchElementException();
+        db.remove(id);
+    }
 }
