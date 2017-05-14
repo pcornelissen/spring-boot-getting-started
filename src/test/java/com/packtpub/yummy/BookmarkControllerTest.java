@@ -49,11 +49,11 @@ public class BookmarkControllerTest {
 
         mvc.perform(
                 delete(location)
-        ).andExpect(status().isGone());
+        ).andDo(print()).andExpect(status().isGone());
 
         mvc.perform(
                 get(location)
-        ).andExpect(status().isNotFound());
+        ).andDo(print()).andExpect(status().isNotFound());
     }
 
     @Test
@@ -63,11 +63,11 @@ public class BookmarkControllerTest {
 
         mvc.perform(
                 delete(location)
-        ).andExpect(status().isGone());
+        ).andDo(print()).andExpect(status().isGone());
 
         mvc.perform(
                 delete(location)
-        ).andExpect(status().isNotModified());
+        ).andDo(print()).andExpect(status().isNotModified());
     }
 
     @Test
@@ -81,7 +81,7 @@ public class BookmarkControllerTest {
                 post(output.getId().getHref())
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content(mapper.writeValueAsString(output.getContent().withUrl("http://kulinariweb.de")))
-        ).andExpect(status().isOk())
+        ).andDo(print()).andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
         output = mapper.readValue(result, new TypeReference<Resource<Bookmark>>() {
         });
@@ -99,7 +99,7 @@ public class BookmarkControllerTest {
                 post(output.getId().getHref())
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content(mapper.writeValueAsString(output.getContent().withUrl("http://kulinariweb.de")))
-        ).andExpect(status().isOk())
+        ).andDo(print()).andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
         mvc.perform(
@@ -108,6 +108,7 @@ public class BookmarkControllerTest {
                         .content(mapper.writeValueAsString(output.getContent().withUrl("http://kulinariweb2.de")))
         ).andDo(print()).andExpect(status().isConflict());
     }
+
     @Test
     public void updateABookmarkFailWrongId() throws Exception {
         Bookmark input = new Bookmark("http://packtpub.com");
@@ -116,8 +117,9 @@ public class BookmarkControllerTest {
                 post("/bookmark/" + UUID.randomUUID())
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content(mapper.writeValueAsString(input))
-        ).andExpect(status().isNotFound())
-                .andDo(print());
+        )
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 
     private Resource<Bookmark> getBookmark(String location) throws Exception {
@@ -134,7 +136,7 @@ public class BookmarkControllerTest {
                 post("/bookmarks")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content(mapper.writeValueAsString(input))
-        ).andExpect(status().isCreated())
+        ).andDo(print()).andExpect(status().isCreated())
                 .andReturn().getResponse().getHeader("Location");
     }
 }
