@@ -2,27 +2,13 @@ package com.packtpub.yummy.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Version;
 import java.util.UUID;
 
-@Entity
 public class Bookmark {
     private String url;
-    @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
     private UUID uuid;
-
-    @Version
-    int version;
+    private int version;
 
     @SuppressWarnings("unused")
     public Bookmark(){
@@ -34,9 +20,10 @@ public class Bookmark {
     }
 
     @JsonCreator
-    public Bookmark(@JsonProperty("url") String url,@JsonProperty("uuid") UUID uuid) {
+    public Bookmark(@JsonProperty("url") String url,@JsonProperty("uuid") UUID uuid,@JsonProperty("version") int version) {
         this.url = url;
         this.uuid=uuid;
+        this.version = version;
     }
 
     public String getUrl() {
@@ -56,7 +43,7 @@ public class Bookmark {
     }
 
     public Bookmark withUuid(UUID uuid) {
-        return new Bookmark(url,uuid);
+        return new Bookmark(url,uuid, version);
     }
 
     public int getVersion() {
@@ -68,6 +55,6 @@ public class Bookmark {
     }
 
     public Bookmark withUrl(String newUrl) {
-        return new Bookmark(newUrl, uuid);
+        return new Bookmark(newUrl, uuid, version);
     }
 }
