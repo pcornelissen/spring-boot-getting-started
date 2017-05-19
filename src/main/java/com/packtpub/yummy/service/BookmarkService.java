@@ -8,16 +8,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import java.util.*;
+import java.util.UUID;
 
 @Service
+@Transactional
 public class BookmarkService {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    PlatformTransactionManager platformTransactionManager;
+    
     public UUID addBookmark(Bookmark bookmark) {
         UUID uuid = UUID.randomUUID();
         jdbcTemplate.update("INSERT INTO bookmark (url, uuid, version)" +
