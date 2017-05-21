@@ -12,7 +12,7 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("bookmark")
+@RequestMapping(value="bookmark", produces = "application/hal+json;charset=UTF-8")
 public class BookmarkController {
     @Autowired
     BookmarkResourceAssembler assembler;

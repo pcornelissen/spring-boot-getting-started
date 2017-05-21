@@ -12,7 +12,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping
+@RequestMapping(produces = "application/hal+json;charset=UTF-8")
 public class ServiceDocumentController {
     @GetMapping("/")
     public Resource<String> getServiceDocument() throws URISyntaxException {

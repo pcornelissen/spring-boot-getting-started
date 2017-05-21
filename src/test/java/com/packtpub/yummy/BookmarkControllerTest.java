@@ -127,6 +127,7 @@ public class BookmarkControllerTest {
     private Resource<Bookmark> getBookmark(String location) throws Exception {
         String result = mvc.perform(
                 get(location)
+                .accept("application/hal+json;charset=UTF-8","application/json;charset=UTF-8")
         ).andDo(print())
                 .andReturn().getResponse().getContentAsString();
         return mapper.readValue(result, new TypeReference<Resource<Bookmark>>() {

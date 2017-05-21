@@ -47,6 +47,7 @@ public class BookmarksControllerTest {
 
         String result = mvc.perform(
                 MockMvcRequestBuilders.get("/bookmarks")
+                        .accept("application/hal+json;charset=UTF-8","application/json;charset=UTF-8")
         ).andDo(print())
                 .andReturn().getResponse().getContentAsString();
         Resources<Bookmark> output = mapper.readValue(result, new TypeReference<Resources<Bookmark>>(){});

@@ -30,6 +30,7 @@ public class ServiceDocumentControllerTest {
     public void getServiceDocument() throws Exception {
         String result = mvc.perform(
                 MockMvcRequestBuilders.get("/")
+                .accept("application/hal+json;charset=UTF-8")
         ).andDo(print())
                 .andExpect(content()
                         .contentTypeCompatibleWith("application/hal+json;charset=UTF-8"))

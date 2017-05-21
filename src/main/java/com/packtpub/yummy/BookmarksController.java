@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("bookmarks")
+@RequestMapping(value = "bookmarks", produces = "application/hal+json;charset=UTF-8")
 public class BookmarksController {
     @Autowired
     BookmarkService bookmarkService;
