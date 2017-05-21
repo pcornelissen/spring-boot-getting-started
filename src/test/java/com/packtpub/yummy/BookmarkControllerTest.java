@@ -18,9 +18,7 @@ import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -31,12 +29,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class BookmarkControllerTest {
     @Autowired
     MockMvc mvc;
+
     @Autowired
     ObjectMapper mapper;
 
     @Test
     public void getABookmark() throws Exception {
-        Bookmark input = new Bookmark("http://packtpub.com");
+        Bookmark input = getSimpleBookmark();
         String location = addBookmark(input);
 
         Resource<Bookmark> output = getBookmark(location);
@@ -46,35 +45,35 @@ public class BookmarkControllerTest {
 
     @Test
     public void deleteABookmark() throws Exception {
-        Bookmark input = new Bookmark("http://packtpub.com");
+        Bookmark input = getSimpleBookmark();
         String location = addBookmark(input);
 
         mvc.perform(
-                delete(location)
+                delete(location).accept("application/hal+json;charset=UTF-8","application/json;charset=UTF-8")
         ).andDo(print()).andExpect(status().isGone());
 
         mvc.perform(
-                get(location)
+                get(location).accept("application/hal+json;charset=UTF-8","application/json;charset=UTF-8")
         ).andDo(print()).andExpect(status().isNotFound());
     }
 
     @Test
     public void deleteABookmarkTwiceYieldsNotModified() throws Exception {
-        Bookmark input = new Bookmark("http://packtpub.com");
+        Bookmark input = getSimpleBookmark();
         String location = addBookmark(input);
 
         mvc.perform(
-                delete(location)
+                delete(location).accept("application/hal+json;charset=UTF-8","application/json;charset=UTF-8")
         ).andDo(print()).andExpect(status().isGone());
 
         mvc.perform(
-                delete(location)
+                delete(location).accept("application/hal+json;charset=UTF-8","application/json;charset=UTF-8")
         ).andDo(print()).andExpect(status().isNotModified());
     }
 
     @Test
     public void updateABookmark() throws Exception {
-        Bookmark input = new Bookmark("http://packtpub.com");
+        Bookmark input = getSimpleBookmark();
         String location = addBookmark(input);
 
         Resource<Bookmark> output = getBookmark(location);
@@ -82,6 +81,7 @@ public class BookmarkControllerTest {
         String result = mvc.perform(
                 post(output.getId().getHref())
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .accept("application/hal+json;charset=UTF-8","application/json;charset=UTF-8")
                         .content(mapper.writeValueAsString(output.getContent().withUrl("http://kulinariweb.de")))
         ).andDo(print()).andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
@@ -93,13 +93,14 @@ public class BookmarkControllerTest {
 
     @Test
     public void updateABookmarkStaleFails() throws Exception {
-        Bookmark input = new Bookmark("http://packtpub.com");
+        Bookmark input = getSimpleBookmark();
         String location = addBookmark(input);
 
         Resource<Bookmark> output = getBookmark(location);
         mvc.perform(
                 post(output.getId().getHref())
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .accept("application/hal+json;charset=UTF-8","application/json;charset=UTF-8")
                         .content(mapper.writeValueAsString(output.getContent().withUrl("http://kulinariweb.de")))
         ).andDo(print()).andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
@@ -107,13 +108,14 @@ public class BookmarkControllerTest {
         mvc.perform(
                 post(output.getId().getHref())
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .accept("application/hal+json;charset=UTF-8","application/json;charset=UTF-8")
                         .content(mapper.writeValueAsString(output.getContent().withUrl("http://kulinariweb2.de")))
         ).andDo(print()).andExpect(status().isConflict());
     }
 
     @Test
     public void updateABookmarkFailWrongId() throws Exception {
-        Bookmark input = new Bookmark("http://packtpub.com");
+        Bookmark input = getSimpleBookmark();
 
         mvc.perform(
                 post("/bookmark/" + UUID.randomUUID())
@@ -124,10 +126,14 @@ public class BookmarkControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    private Bookmark getSimpleBookmark() {
+        return new Bookmark("Packt publishing", "http://packtpub.com");
+    }
+
     private Resource<Bookmark> getBookmark(String location) throws Exception {
         String result = mvc.perform(
                 get(location)
-                .accept("application/hal+json;charset=UTF-8","application/json;charset=UTF-8")
+                        .accept("application/hal+json;charset=UTF-8", "application/json;charset=UTF-8")
         ).andDo(print())
                 .andReturn().getResponse().getContentAsString();
         return mapper.readValue(result, new TypeReference<Resource<Bookmark>>() {

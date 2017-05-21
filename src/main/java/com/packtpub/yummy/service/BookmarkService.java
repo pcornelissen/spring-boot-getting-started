@@ -5,10 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -21,36 +19,31 @@ public class BookmarkService {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    PlatformTransactionManager platformTransactionManager;
-    
     public UUID addBookmark(Bookmark bookmark) {
         UUID uuid = UUID.randomUUID();
-        jdbcTemplate.update("INSERT INTO bookmark (url, uuid, version)" +
-                " values (?,?,1)", bookmark.getUrl(), uuid);
+        jdbcTemplate.update("INSERT INTO bookmark (url, uuid, version, description)" +
+                " values (?,?,1,?)", bookmark.getUrl(), uuid, bookmark.getDescription());
         return uuid;
     }
 
     public Bookmark find(UUID id) {
         return jdbcTemplate.queryForObject("select * from bookmark where uuid=?",
-                (rs, rowNum) -> new Bookmark(
-                        rs.getString("url"),
-                        rs.getObject("uuid", UUID.class),
-                        rs.getInt("version")
-                ), id);
+                new BookmarkRowMapper(), id);
 
     }
 
     public Iterable<Bookmark> findAll() {
         return jdbcTemplate.query("select * from bookmark",
-                BeanPropertyRowMapper.newInstance(Bookmark.class));
+                new BookmarkRowMapper());
     }
 
     public Bookmark update(Bookmark bookmark) {
         find(bookmark.getUuid());
         int update = jdbcTemplate.update(
-                "update bookmark set url=?, version=version+1 where uuid=? and version =?",
-                bookmark.getUrl(), bookmark.getUuid(), bookmark.getVersion()
+                "update bookmark set url=?, description=?, " +
+                        " updatedon=current_timestamp(), version=version+1 " +
+                        " where uuid=? and version =?",
+                bookmark.getUrl(), bookmark.getDescription(), bookmark.getUuid(), bookmark.getVersion()
         );
         if(update!=1)throw new OptimisticLockingFailureException("Stale update detected for "+bookmark.getUuid());
         return find(bookmark.getUuid());
@@ -68,4 +61,5 @@ public class BookmarkService {
             super(msg);
         }
     }
+
 }

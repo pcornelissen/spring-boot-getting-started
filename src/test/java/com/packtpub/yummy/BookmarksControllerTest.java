@@ -7,6 +7,7 @@ import com.packtpub.yummy.service.BookmarkService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.mockito.verification.VerificationMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +18,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.internal.verification.VerificationModeFactory.atLeastOnce;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -35,15 +40,15 @@ public class BookmarksControllerTest {
 
     @Test
     public void addABookmark() throws Exception {
-        Bookmark value = new Bookmark("http://packtpub.com");
+        Bookmark value = new Bookmark("Packt publishing","http://packtpub.com");
         addBookmark(value);
-        Mockito.verify(bookmarkService).addBookmark(Mockito.any(Bookmark.class));
+        Mockito.verify(bookmarkService, atLeastOnce()).addBookmark(Mockito.any(Bookmark.class));
     }
 
     @Test
     public void getAllBookmarks() throws Exception {
-        addBookmark(new Bookmark("http://packtpub.com"));
-        addBookmark(new Bookmark("http://orchit.de"));
+        addBookmark(new Bookmark("Packt publishing","http://packtpub.com"));
+        addBookmark(new Bookmark("orchit GmbH homepage","http://orchit.de"));
 
         String result = mvc.perform(
                 MockMvcRequestBuilders.get("/bookmarks")
@@ -52,7 +57,7 @@ public class BookmarksControllerTest {
                 .andReturn().getResponse().getContentAsString();
         Resources<Bookmark> output = mapper.readValue(result, new TypeReference<Resources<Bookmark>>(){});
 
-        assertTrue(output.getContent().size() >= 2);
+        assertThat(output.getContent().size(), is(greaterThanOrEqualTo(2)));
         assertTrue(output.getContent().stream()
                 .anyMatch(bookmark ->
                         bookmark.getUrl().equals("http://orchit.de")));

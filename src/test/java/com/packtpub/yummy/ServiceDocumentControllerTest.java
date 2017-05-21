@@ -2,6 +2,7 @@ package com.packtpub.yummy;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static junit.framework.TestCase.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -38,7 +43,8 @@ public class ServiceDocumentControllerTest {
 
         Resource<String> value = mapper.readValue(result, new TypeReference<Resource<String>>(){});
 
-        assertTrue(value.hasLink("self"));
+        List<String> linkRels = value.getLinks().stream().map(link -> link.getRel()).collect(Collectors.toList());
+        assertThat(linkRels, Matchers.hasItem("self"));
         assertEquals(value.getLink("self"),value.getId());
 
         assertTrue(value.hasLink("bookmarks"));
