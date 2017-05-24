@@ -22,7 +22,16 @@
     <div>
         Last update on: <span th:text="${#temporals.format(bookmark.updatedOn)}">now</span>
     </div>
+    <div>
+        <form th:action="@{/}" method="get">
+            <button class="btn" type="submit">Back to the List</button>
+        </form>
+        <form th:action="@{/bookmark/{id}/delete(id=${bookmark.uuid})}" method="post">
+            <button class="btn btn-danger" type="submit">Delete</button>
+        </form>
+    </div>
 </fieldset>
+<script src="/webjars/jquery/jquery.min.js"></script>
 <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>

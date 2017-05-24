@@ -16,10 +16,17 @@
         <td th:text="${bookmarkStat.index+1}+'.'">Desc</td>
         <td th:text="${bookmark.description}">Desc</td>
         <td><a th:text="${bookmark.url}" th:href="${bookmark.url}">bla</a></td>
-        <td><a th:href="@{/bookmark/{id}(id=${bookmark.uuid})}">Details</a></td>
+        <td>
+            <form th:action="@{/bookmark/{id}(id=${bookmark.uuid})}" method="get">
+                <button class="btn" type="submit">Details</button>
+            </form>
+            <form th:action="@{/bookmark/{id}/delete(id=${bookmark.uuid})}" method="post">
+                <button class="btn btn-danger" type="submit">Delete</button>
+            </form>
+        </td>
     </tr>
 </table>
-
+<script src="/webjars/jquery/jquery.min.js"></script>
 <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>
