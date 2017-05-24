@@ -23,9 +23,10 @@
         Last update on: <span th:text="${#temporals.format(bookmark.updatedOn)}">now</span>
     </div>
     <div>
-        <form th:action="@{/}" method="get">
-            <button class="btn" type="submit">Back to the List</button>
-        </form>
+        <button class="btn primary" type="button"
+                th:onclick="'location.href=\''+@{/}+'\''">Back to the List</button>
+        <button class="btn primary" type="button"
+          th:onclick="'location.href=\''+@{/bookmark/{id}(id=${bookmark.uuid}, edit='true')}+'\''">Edit</button>
         <form th:action="@{/bookmark/{id}/delete(id=${bookmark.uuid})}" method="post">
             <button class="btn btn-danger" type="submit">Delete</button>
         </form>

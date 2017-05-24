@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Bookmark Edit Form</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+</head>
+<body class="container">
+<h1>Bookmark Edit Form</h1>
+<!--/*@thymesVar id="bookmark" type="com.packtpub.yummy.model.Bookmark"*/-->
+<form th:action="@{/bookmark/{id}(id=${bookmark.uuid})}" method="post" th:object="${bookmark}">
+    <fieldset>
+        <legend>Bookmark</legend>
+        <div>
+            <label for="description">
+                Description
+            </label>
+            <input th:field="*{description}"/>
+        </div>
+        <div>
+            <label for="url">
+                Url
+            </label>
+            <input th:field="*{url}"/>
+        </div>
+        <input th:field="*{version}" type="hidden"/>
+        <div>
+            Created on: <span th:text="${#temporals.format(bookmark.createdOn)}">now</span>
+        </div>
+        <div>
+            Last update on: <span th:text="${#temporals.format(bookmark.updatedOn)}">now</span>
+        </div>
+        <div>
+            <button class="btn primary" type="submit">Save</button>
+            <button class="btn secondary" type="reset">Reset</button>
+        </div>
+    </fieldset>
+</form>
+<script src="/webjars/jquery/jquery.min.js"></script>
+<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>
