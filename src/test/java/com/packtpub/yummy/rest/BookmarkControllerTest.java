@@ -120,6 +120,7 @@ public class BookmarkControllerTest {
         mvc.perform(
                 post("/bookmark/" + UUID.randomUUID())
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .accept("application/hal+json;charset=UTF-8", "application/json;charset=UTF-8")
                         .content(mapper.writeValueAsString(input))
         )
                 .andDo(print())
