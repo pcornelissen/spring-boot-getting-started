@@ -2,14 +2,22 @@ package com.packtpub.yummy.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.URL;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Bookmark {
+    @Length(max=255)
+    @NotNull
     private String description;
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
+    @Length(max=255)
+    @NotNull
+    @URL
     private String url;
     private UUID uuid;
     private int version;
