@@ -23,6 +23,7 @@ public class BookmarkService {
         UUID uuid = UUID.randomUUID();
         jdbcTemplate.update("INSERT INTO bookmark (url, uuid, version, description)" +
                 " values (?,?,1,?)", bookmark.getUrl(), uuid, bookmark.getDescription());
+        System.out.println("http://localhost:8080/bookmark/"+uuid);
         return uuid;
     }
 

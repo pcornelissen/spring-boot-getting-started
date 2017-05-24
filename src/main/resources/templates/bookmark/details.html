@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Bookmark details view</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+</head>
+<body class="container">
+<h1>Bookmark Details</h1>
+<fieldset>
+
+    <!--/*@thymesVar id="bookmark" type="com.packtpub.yummy.model.Bookmark"*/-->
+    <label th:text="${bookmark.description}">Bookmark</label>
+    <div>
+        <a href="example.com" th:href="${bookmark.url}" th:text="${bookmark.url}">Link</a>
+    </div>
+    <div>
+        Created on: <span th:text="${#temporals.format(bookmark.createdOn)}">now</span>
+    </div>
+    <div>
+        Last update on: <span th:text="${#temporals.format(bookmark.updatedOn)}">now</span>
+    </div>
+</fieldset>
+<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>
