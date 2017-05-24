@@ -1,6 +1,7 @@
-package com.packtpub.yummy;
+package com.packtpub.yummy.model;
 
 import com.packtpub.yummy.model.Bookmark;
+import com.packtpub.yummy.rest.BookmarkController;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.ResourceAssembler;
 import org.springframework.stereotype.Component;

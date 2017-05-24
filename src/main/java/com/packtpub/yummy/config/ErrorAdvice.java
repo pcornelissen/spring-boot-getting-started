@@ -1,4 +1,4 @@
-package com.packtpub.yummy;
+package com.packtpub.yummy.config;
 
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.dao.OptimisticLockingFailureException;

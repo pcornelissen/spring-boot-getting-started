@@ -1,5 +1,6 @@
-package com.packtpub.yummy;
+package com.packtpub.yummy.rest;
 
+import com.packtpub.yummy.model.BookmarkResourceAssembler;
 import com.packtpub.yummy.model.Bookmark;
 import com.packtpub.yummy.service.BookmarkService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.packtpub.yummy;
+package com.packtpub.yummy.rest;
 
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.mvc.BasicLinkBuilder;

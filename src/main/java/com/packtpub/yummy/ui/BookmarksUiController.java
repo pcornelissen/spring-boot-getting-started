@@ -1,4 +1,4 @@
-package com.packtpub.yummy;
+package com.packtpub.yummy.ui;
 
 import com.packtpub.yummy.service.BookmarkService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.packtpub.yummy;
+package com.packtpub.yummy.rest;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
