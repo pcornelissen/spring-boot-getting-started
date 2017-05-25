@@ -4,37 +4,43 @@
       xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8"/>
-    <title>Bookmark Edit Form</title>
     <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+    <title th:if="${isEdit}">Bookmark Edit Form</title>
+    <title th:unless="${isEdit}">Bookmark Add Form</title>
 </head>
 <body class="container">
-<h1>Bookmark Edit Form</h1>
+<h1 th:if="${isEdit}">Bookmark Edit Form</h1>
+<h1 th:unless="${isEdit}">Bookmark Add Form</h1>
+
+<!--/*@thymesVar id="isEdit" type="java.lang.Boolean"*/-->
 <!--/*@thymesVar id="bookmark" type="com.packtpub.yummy.model.Bookmark"*/-->
-<form th:action="@{/bookmark/{id}(id=${bookmark.uuid})}" method="post" th:object="${bookmark}">
+<form th:action="@{/bookmark/{id}(id=${isEdit}?${bookmark.uuid}:'')}" method="post" th:object="${bookmark}">
     <fieldset>
         <legend>Bookmark</legend>
-        <div>
+        <div class="form-group">
             <label for="description">
                 Description
             </label>
-            <input th:field="*{description}"/>
+            <input type="text" class="form-control" th:field="*{description}"/>
         </div>
-        <div>
+        <div class="form-group">
             <label for="url">
                 Url
             </label>
-            <input th:field="*{url}"/>
+            <input type="url" class="form-control" th:field="*{url}"/>
         </div>
-        <input th:field="*{version}" type="hidden"/>
-        <div>
-            Created on: <span th:text="${#temporals.format(bookmark.createdOn)}">now</span>
+        <input th:if="${isEdit}" th:field="*{version}" type="hidden"/>
+        <div th:if="${isEdit}" style="text-align:right">
+            <div style="display:inline">
+                <span style="font-weight: bold">Created on:</span> <span th:text="${#temporals.format(bookmark.createdOn)}">now</span>
+            </div>
+            <div style="display:inline">
+                <span style="font-weight: bold">Last update on:</span> <span th:text="${#temporals.format(bookmark.updatedOn)}">now</span>
+            </div>
         </div>
-        <div>
-            Last update on: <span th:text="${#temporals.format(bookmark.updatedOn)}">now</span>
-        </div>
-        <div>
-            <button class="btn primary" type="submit">Save</button>
-            <button class="btn secondary" type="reset">Reset</button>
+        <div class="form-group">
+            <button class="btn btn-primary" type="submit">Save</button>
+            <button class="btn btn-secondary" type="reset">Reset</button>
         </div>
     </fieldset>
 </form>

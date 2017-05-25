@@ -22,12 +22,12 @@
     <div>
         Last update on: <span th:text="${#temporals.format(bookmark.updatedOn)}">now</span>
     </div>
-    <div>
-        <button class="btn primary" type="button"
-                th:onclick="'location.href=\''+@{/}+'\''">Back to the List</button>
-        <button class="btn primary" type="button"
-          th:onclick="'location.href=\''+@{/bookmark/{id}(id=${bookmark.uuid}, edit='true')}+'\''">Edit</button>
-        <form th:action="@{/bookmark/{id}/delete(id=${bookmark.uuid})}" method="post">
+    <div style="text-align: left">
+        <a role="button" class="btn btn-primary" th:href="@{/}">Back to the List</a>
+        <a role="button" class="btn btn-success"
+           th:href="@{/bookmark/{id}(id=${bookmark.uuid}, edit='true')}">Edit</a>
+        <form style="display: inline"
+              th:action="@{/bookmark/{id}/delete(id=${bookmark.uuid})}" method="post">
             <button class="btn btn-danger" type="submit">Delete</button>
         </form>
     </div>

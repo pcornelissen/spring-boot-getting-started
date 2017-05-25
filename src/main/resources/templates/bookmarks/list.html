@@ -10,6 +10,12 @@
 <body class="container">
 <h1>List of all bookmarks</h1>
 
+<div style="text-align: right;margin-bottom: 1em;">
+    <a role="button" class="btn btn-primary" type="button"
+            th:href="@{/bookmark/}">Add Bookmark
+    </a>
+</div>
+
 <table class="table">
     <!--/*@thymesVar id="bookmarks" type="java.lang.Iterable<com.packtpub.yummy.model.Bookmark>"*/-->
     <tr th:each="bookmark: ${bookmarks}">
@@ -17,10 +23,10 @@
         <td th:text="${bookmark.description}">Desc</td>
         <td><a th:text="${bookmark.url}" th:href="${bookmark.url}">bla</a></td>
         <td>
-            <form th:action="@{/bookmark/{id}(id=${bookmark.uuid})}" method="get">
-                <button class="btn" type="submit">Details</button>
-            </form>
-            <form th:action="@{/bookmark/{id}/delete(id=${bookmark.uuid})}" method="post">
+            <a class="btn btn-info" role="button"
+                    th:href="@{/bookmark/{id}(id=${bookmark.uuid})}">Details
+            </a>
+            <form th:action="@{/bookmark/{id}/delete(id=${bookmark.uuid})}" method="post" style="display: inline">
                 <button class="btn btn-danger" type="submit">Delete</button>
             </form>
         </td>
