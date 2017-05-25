@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -27,7 +28,7 @@ public class BookmarkController {
     }
 
     @PostMapping("{id}")
-    public Resource<Bookmark> updateBookmark(@PathVariable UUID id, @RequestBody Bookmark bookmark) {
+    public Resource<Bookmark> updateBookmark(@PathVariable UUID id, @RequestBody @Valid Bookmark bookmark) {
         return assembler.toResource(bookmarkService.update(bookmark.withUuid(id)));
     }
 

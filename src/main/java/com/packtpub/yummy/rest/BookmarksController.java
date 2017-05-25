@@ -8,6 +8,7 @@ import org.springframework.hateoas.mvc.BasicLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController
@@ -16,7 +17,7 @@ public class BookmarksController {
     @Autowired
     BookmarkService bookmarkService;
     @PostMapping
-    public ResponseEntity<Void> addBookmark(@RequestBody Bookmark bookmark){
+    public ResponseEntity<Void> addBookmark(@RequestBody @Valid Bookmark bookmark){
         UUID uuid = bookmarkService.addBookmark(bookmark);
         return ResponseEntity.created(
                 BasicLinkBuilder.linkToCurrentMapping()
