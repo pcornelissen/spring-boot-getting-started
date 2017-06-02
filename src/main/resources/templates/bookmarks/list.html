@@ -11,6 +11,9 @@
 <h1>List of all bookmarks</h1>
 
 <div style="text-align: right;margin-bottom: 1em;">
+    <form th:action="@{/logout}" method="post" style="display: inline">
+        <button class="btn btn-danger" type="submit">Logout</button>
+    </form>
     <a role="button" class="btn btn-primary" type="button"
             th:href="@{/bookmark/}">Add Bookmark
     </a>
