@@ -1,5 +1,6 @@
 package com.packtpub.yummy.service;
 
+import com.packtpub.yummy.config.MyConfiguration;
 import com.packtpub.yummy.model.Bookmark;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,8 +22,12 @@ public class BookmarkService {
     @Value("${test:Oh No}")
     String testMessage;
 
+    @Autowired
+    MyConfiguration myConfiguration;
+
     @PostConstruct
     public void doIt(){
+        System.out.println("config: "+myConfiguration);
         System.out.println("test message: "+testMessage);
     }
     @Autowired
@@ -32,7 +37,7 @@ public class BookmarkService {
         UUID uuid = UUID.randomUUID();
         jdbcTemplate.update("INSERT INTO bookmark (url, uuid, version, description)" +
                 " values (?,?,1,?)", bookmark.getUrl(), uuid, bookmark.getDescription());
-        System.out.println("http://localhost:8080/bookmark/"+uuid);
+        //System.out.println("http://localhost:8080/bookmark/"+uuid);
         return uuid;
     }
 
