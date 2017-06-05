@@ -1,9 +1,7 @@
 package com.packtpub.yummy.service;
 
-import com.packtpub.yummy.config.MyConfiguration;
 import com.packtpub.yummy.model.Bookmark;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
@@ -12,34 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import javax.annotation.PostConstruct;
-import java.util.List;
 import java.util.UUID;
 
 @Service
 @Transactional
 public class BookmarkService {
 
-    @Value("${test:Oh No}")
-    String testMessage;
-
-    @Autowired
-    List<SuperService> superServices;
-    @Autowired
-    MyConfiguration myConfiguration;
-
-    @PostConstruct
-    public void doIt() throws InterruptedException {
-        System.out.println("config: "+myConfiguration);
-        System.out.println("test message: "+testMessage);
-
-        for (SuperService superService : superServices) {
-            superService.foo();
-        }
-
-
-        Thread.sleep(10*1000);
-    }
     @Autowired
     JdbcTemplate jdbcTemplate;
 
