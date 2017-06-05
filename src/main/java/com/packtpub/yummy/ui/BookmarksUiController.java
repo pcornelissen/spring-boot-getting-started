@@ -7,9 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/")
@@ -19,19 +16,8 @@ public class BookmarksUiController {
 
     @GetMapping
     @PreAuthorize("isAuthenticated()")
-    public String listOfBookmarks(Model model, @RequestParam Optional<String> data){
-        data.ifPresent(s -> myTestBean.setBusinessData(s));
-
+    public String listOfBookmarks(Model model){
         model.addAttribute("bookmarks", bookmarkService.findAll());
-
-        System.out.println("BookmarksUiController: "+myTestBean.getBusinessData());
-        model.addAttribute("businessData", myTestBean.getBusinessData());
-
         return "bookmarks/list";
     }
-
-
-    @Autowired MyTestBean myTestBean;
-
-
 }

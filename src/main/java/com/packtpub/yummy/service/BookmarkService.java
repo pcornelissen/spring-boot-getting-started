@@ -1,7 +1,6 @@
 package com.packtpub.yummy.service;
 
 import com.packtpub.yummy.model.Bookmark;
-import com.packtpub.yummy.ui.MyTestBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.OptimisticLockingFailureException;
@@ -16,9 +15,6 @@ import java.util.UUID;
 @Service
 @Transactional
 public class BookmarkService {
-
-    @Autowired
-    MyTestBean myTestBean;
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -38,7 +34,6 @@ public class BookmarkService {
     }
 
     public Iterable<Bookmark> findAll() {
-        System.out.println("BookmarkService: "+myTestBean.getBusinessData());
         return jdbcTemplate.query("select * from bookmark",
                 new BookmarkRowMapper());
     }
