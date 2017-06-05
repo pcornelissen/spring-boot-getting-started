@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -23,12 +24,21 @@ public class BookmarkService {
     String testMessage;
 
     @Autowired
+    List<SuperService> superServices;
+    @Autowired
     MyConfiguration myConfiguration;
 
     @PostConstruct
-    public void doIt(){
+    public void doIt() throws InterruptedException {
         System.out.println("config: "+myConfiguration);
         System.out.println("test message: "+testMessage);
+
+        for (SuperService superService : superServices) {
+            superService.foo();
+        }
+
+
+        Thread.sleep(10*1000);
     }
     @Autowired
     JdbcTemplate jdbcTemplate;
