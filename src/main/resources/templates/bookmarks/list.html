@@ -10,6 +10,10 @@
 </head>
 <body class="container">
 <h1>List of all bookmarks</h1>
+<!--/*@thymesVar id="businessData" type="java.lang.String"*/-->
+<h3>Scope testdata:
+    <th:block th:text="${businessData}"></th:block>
+</h3>
 <div>
     Hello <span sec:authentication="principal.username">Username</span>
 </div>
