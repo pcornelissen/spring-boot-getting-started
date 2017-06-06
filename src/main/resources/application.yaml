@@ -1,0 +1,11 @@
+info:
+  hint: it is so cool
+server:
+  compression:
+    enabled: true
+
+
+spring:
+  beaninfo:
+    ignore: false
+
